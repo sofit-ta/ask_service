@@ -1,12 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ask</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <h1>"ask"</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<div role="ask_new_question" class="container-fluid mt-2 align-items-center justify-content-start needs-validation" novalidate>
+    <h3>New Question</h3>
+    <form role="new_question" class="d-flex flex-column me-1 gap-2 ms-3">
+        <div class="row d-flex gap-2">
+            <label for="inputTitle" class="col-md-1 col-form-label">Title</label>
+            <div class="col-md-9 me-2">
+                <input type="title" class="form-control" id="inputTitle" maxlength="50" placeholder="Enter a title..." required>
+                <div class="form-text title-hint text-help">Write a brief main question or the main idea</div>
+            </div>
+        </div>
+        <div class="row d-flex gap-2">
+            <label for="inputText" class="col-md-1 col-form-label">Text</label>
+            <div class="col-md-9 me-2">
+                <textarea class="form-control" id="inputText" rows="10" placeholder="Enter a description..."></textarea>
+                <div class="form-text textarea-hint textarea-help">Explain your question in details</div>
+            </div>
+        </div>
+        <div class="row d-flex gap-2">
+            <label for="inputTags" class="col-md-1 col-form-label">Tags</label>
+            <div class="col-md-9 me-2">
+                <input type="tags" class="form-control" id="inputTags" pattern="^([a-zA-Z0-9]+(?:,\s*[a-zA-Z0-9]+)*)?$" placeholder="Enter tags..." required>
+                <div class="form-text tags_input-hint tags_input-help">Add tags to your question to establish a topic of discussion! Example: one, two, three...</div>
+            </div>
+        </div>
+        <div class="row d-flex gap-2">
+            <span class="col-md-1 col-form-label"></span>
+            <div class="col-md-2 me-2">
+                <button class="btn btn-primary" style="border-radius: 0.25rem;">Ask!</button>
+            </div>
+        </div>
+    </form>
+</div>
+<style>
+    .form-control:focus ~ .form-text.title-hint,
+    .form-control:focus ~ .form-text.textarea-hint,
+    .form-control:focus ~ .form-text.tags_input-hint{
+        display: block;
+    }
+    .form-text {
+        display: none;
+    }
+</style>
+{% endblock %}

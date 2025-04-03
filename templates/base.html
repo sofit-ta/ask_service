@@ -1,27 +1,84 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Base</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Base</title>
+  <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
 </head>
+
 <body>
-    <div>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-              <a class="navbar-brand" href="#">AskTaukaeva</a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <form class="d-flex" role="search">
-                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                  <button type="button" class="btn btn-success"> Ask! </button>
-                </form>
-              </div>
+  <header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid justify-content-between px-2">
+        <div class="col-md-2 d-flex justify-content-center" role="site_name">
+          <a class="navbar-brand ms-3 " href="/"><h3>AskTaukaeva</h3></a>
+        </div>
+        <div class="col-md-4 ms-1 d-flex align-items-center gap-2" role="search">
+          <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+          <a href="/" type="button" class="btn btn-outline-primary btn-sm">Find</a>
+        </div>
+
+        <a href="/ask" class="btn btn-success col-md-1 px-2" style="height: 40px;" type="submit">Ask!</a>
+
+        {% if not user.is_authenticated %}
+        <div class="d-flex col-md-3 align-items-center justify-content-end" role="account_content">
+          <img src="..." alt="account image" class="img-thumbnail me-1" style="width: 70px; height: 70px;">
+          <div class="d-flex flex-column" role="account_info">
+            <a href="#" style="text-decoration: none; color: inherit;"><h6>Dr.Pepper</h6></a>
+            <div role="account_links" class="d-flex justify-content-center gap-2">
+              <a href="#">settings</a>
+              <a href="#">log out</a>
             </div>
-          </nav>
-    </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="d-flex col-md-3 align-items-center justify-content-start gap-2" role="account_links">
+          <a href="/login">log in</a>
+          <a href="/signup">register</a>
+        </div>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+  <div class="container-fluid row mx-0 px-1">
+    <main class="col-md-9 container">
+      {% block content %}
+      {% endblock %}
+    </main>
+    <aside class="col-md-3 d-flex flex-column justify-content-start px-0" role="sidebar">
+      <div role="aside__tags" class="mt-3">
+        <h3>Popular tags</h3>
+        <div role="tags" class="d-flex gap-2 flex-wrap">
+          <a href="#" class="link-primary">perl</a> <a href="#" class="link-secondary">Python</a>
+          <a href="#" class="link-success">TechnoPark</a> <a href="#" class="link-danger">MySQL</a>
+          <a href="#" class="link-dark">django</a> <a href="#" class="link-info">Mair.Ru</a>
+          <a href="#" class="link-dark">Voloshin</a> <a href="#" class="link-warning">Firefox</a>
+        </div>
+      </div>
+      <div class="aside__members mt-3">
+        <h3>Best members</h3>
+        <div class="d-flex flex-column gap-1">
+          <a href="#">Mr.Freeman</a>
+          <a href="#">Dr. House</a>
+          <a href="#">Bender</a>
+          <a href="#">Queen Victoria</a>
+          <a href="#">V.Pupkin</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  <footer>
+    <footer class="py-3 my-4 bg-body-tertiary">
+      <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        <li class="nav-item"><a href="/" class="nav-link px-2 text-muted">Home</a></li>
+        <li class="nav-item"><a href="/ask" class="nav-link px-2 text-muted">Ask a question</a></li>
+        <li class="nav-item"><a href="/signup" class="nav-link px-2 text-muted">Sign Up</a></li>
+        <li class="nav-item"><a href="/login" class="nav-link px-2 text-muted">Log In</a></li>
+      </ul>
+      <p class="text-center text-muted">2025 AskTaukaeva, Inc</p>
+    </footer>
+  </footer>
 </body>
 </html>

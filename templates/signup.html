@@ -1,12 +1,134 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SignUp</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <h1>"signup"</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<div role="signup_window" class="container-fluid mt-2 align-items-center justify-content-start">
+    <h3>Registration</h3>
+    <form role="log_in_form" class="d-flex flex-column me-1 gap-2 ms-3 needs-validation" novalidate>
+
+        <div class="form-text signup-error text-danger">Invalid registration data or account with this email already exists!</div>
+        <div class="row d-flex gap-2">
+            <label for="inputPassword" class="col-md-2 col-form-label">Login</label>
+            <div class="col-md-8 me-2">
+                <input type="login" class="form-control" id="inputLogin" minlength="5" maxlength="30"
+                    placeholder="Create your login" required pattern="^[a-z0-9_]{5,30}$">
+                <div class="form-text login-hint text-danger">Login has to be 5-30 characters long and consists of
+                    lowercase latin letters, numbers, and underscores (_).</div>
+            </div>
+        </div>
+        <div class="row d-flex gap-2">
+            <label for="inputEmail" class="col-md-2 col-form-label">Email</label>
+            <div class="col-md-8 me-2">
+                <input type="email" class="form-control" id="inputEmail" maxlength="320" placeholder="Enter your email"
+                    required>
+                <div class="form-text email-hint text-danger">Enter a valid email (e.g. name@example.com)</div>
+            </div>
+        </div>
+
+        <div class="row d-flex gap-2">
+            <label for="inputNickname" class="col-md-2 col-form-label">Nickname</label>
+            <div class="col-md-8 me-2">
+                <input type="nickname" class="form-control" id="inputNickname" minlength="5" maxlength="30"
+                    placeholder="Create a nickname" required>
+                <div class="form-text nickname-hint text-danger">This field cannot be empty. Minimum 5 characters.</div>
+            </div>
+        </div>
+
+        <div class="row d-flex gap-2">
+            <label for="inputPassword" class="col-md-2 col-form-label">Password</label>
+            <div class="col-md-8 me-2">
+                <input type="password" class="form-control" id="inputPassword" minlength="8" maxlength="20"
+                    placeholder="Create a password" required>
+                <div class="form-text password-hint text-danger">Password must be 8-20 characters long.</div>
+            </div>
+        </div>
+        <div class="row d-flex gap-2">
+            <label for="inputConfirmPassword" class="col-md-2 col-form-label"> Confirm Password</label>
+            <div class="col-md-8 me-2">
+                <input type="password" class="form-control" id="inputConfirmPassword" minlength="8" maxlength="20" placeholder="Enter your password again" required>
+                <div class="form-text confirm_password-hint text-danger">Passwords are diffrent.</div>
+            </div>
+        </div>
+
+        <div class="row d-flex gap-2">
+            <label class="col-md-2 col-form-label" for="inputGroupFile01">Upload avatar</label>
+            <div class="col-md-8 me-2">
+                <input type="file" class="form-control" id="inputGroupFile01" accept="image/*" required>
+            </div>
+        </div>
+
+        <div class="row d-flex gap-2">
+            <span class="col-md-2 col-form-label"></span>
+            <div class="col-md-2 me-2">
+                <button class="btn btn-primary signup-button" style="border-radius: 0.25rem;">Sign Up</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .form-control {
+        border: 1px solid black;
+    }
+
+    .form-control:valid {
+        border-color: green;
+    }
+
+    .form-control:invalid:focus~.form-text.nickname-hint,
+    .form-control:invalid:focus~.form-text.login-hint,
+    .form-control:invalid:focus~.form-text.email-hint,
+    .form-control:invalid:focus~.form-text.password-hint {
+        display: block;
+    }
+
+    .form-control:valid~.form-text.nickname-hint,
+    .form-control:valid~.form-text.login-hint,
+    .form-control:valid~.form-text.email-hint,
+    .form-control:valid~.form-text.password-hint {
+        display: none;
+    }
+
+    .form-control:focus:invalid~.form-text.nickname-hint {
+        display: block;
+    }
+
+    .form-control:focus:invalid~.form-text.login-hint {
+        display: block;
+    }
+
+    .form-control:focus:invalid~.form-text.email-hint {
+        display: block;
+    }
+
+    .form-control:focus:invalid~.form-text.password-hint {
+        display: block;
+    }
+
+    .form-text {
+        display: none;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const button = document.querySelector(".signup-button");
+        const errorMessage = document.querySelector(".signup-error");
+        const passwordField = document.getElementById("inputPassword");
+        const confirmPasswordField = document.getElementById("inputConfirmPassword");
+        const confirmPasswordHint = document.querySelector(".confirm_password-hint");
+
+        button.addEventListener("click", function (event) {
+            event.preventDefault();
+            errorMessage.style.display = "block";
+        });
+        confirmPasswordField.addEventListener("input", function() {
+            if (confirmPasswordField.value !== passwordField.value) {
+                confirmPasswordHint.style.display = "block";
+            } else {
+                confirmPasswordHint.style.display = "none";
+                confirmPasswordField.setCustomValidity("");
+            }
+        });
+    });
+</script>
+
+{% endblock %}

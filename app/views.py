@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse
 
 # Create your views here.
 def index(request):
+    # return render(request, 'base.html')
     return render(request, 'index.html')
 
 def question(request):
