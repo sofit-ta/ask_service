@@ -1,11 +1,10 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
-
 {% block content %}
 <div role="questions" class="container-fluid mt-2 align-items-center justify-content-start">
     <div class="d-flex gap-2 align-items-center">
-        <h3>New Questions</h3>
-        <a href="{% url 'hot_questions' %}">Hot Questions</a>
+        <h3>Hot Questions</h3>
+        <a href="{% url 'index'%}">New Questions</a>
     </div>
 
     <div class="d-flex flex-column gap-2 align-items-center" role="cards_of_questions">
@@ -13,5 +12,5 @@
         {%include 'layouts/question_card.html'%}
         {%endfor%}
     </div>
-{%include 'layouts/paginator.html' with cards=questions%}
+    {%include 'layouts/paginator.html' with cards=questions%}
 {% endblock %}

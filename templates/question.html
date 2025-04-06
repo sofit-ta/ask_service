@@ -1,225 +1,59 @@
-{% extends 'base.html' %}
-
+{% extends 'layouts/base.html' %}
+{% load static %}
 {% block content %}
 <div role="opened_question" class="container-fluid mt-2 align-items-center justify-content-start">
     <div class="p-2 mb-4" role="question_card">
         <div class="row g-0">
             <div class="d-flex flex-column align-items-center col-md-3 mt-2 me-2">
-                <img src="..." class="img-thumbnail" alt="Question icon" style="width: 150px; height: 150px;">
+                <img src="{%static question.img %}" class="img-thumbnail" alt="Question icon"
+                    style="width: 150px; height: 150px;">
                 <form class="d-flex align-items-stretch mt-2">
-                    <input type="number" class="form-control text-center px-0" value="5" disabled
-                        style="width: 25px; height: 40px; border-radius: 0;">
+                    <input type="number" class="form-control text-center px-0" value="{{question.likes}}" disabled
+                        style="width: 40px; height: 40px; border-radius: 0;">
                     <div class="btn-group-vertical" role="likes_dislikes" style="width: 30px; height: 40px;">
-                        <input type="radio" class="btn-check" name="vbtn-radio_question" id="vbtn-radio_question1"
+                        <input type="radio" class="btn-check" name="vote_question" id="like_question"
                             autocomplete="off">
                         <label
                             class="btn btn-outline-success btn-sm p-1 d-flex align-items-center justify-content-center"
-                            for="vbtn-radio_question1" style="border-radius: 0; height: 50%;">+</label>
-                        <input type="radio" class="btn-check" name="vbtn-radio_question" id="vbtn-radio_question2"
+                            for="like_question" style="border-radius: 0; height: 50%;">+</label>
+                        <input type="radio" class="btn-check" name="vote_question" id="dislike_question"
                             autocomplete="off">
                         <label
                             class="btn btn-outline-danger btn-sm p-1 d-flex align-items-center justify-content-center"
-                            for="vbtn-radio_question2" style="border-radius: 0; height: 50%;">-</label>
+                            for="dislike_question" style="border-radius: 0; height: 50%;">-</label>
                     </div>
                 </form>
             </div>
 
             <div class="col-md-7">
                 <div class="card-body">
-                    <h3 class="card-title mb-2">How to build a moon park?</h3>
-                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi et
-                        aliquid praesentium maiores labore quasi, ducimus maxime quam Lorem ipsum dolor sit amet
-                        consectetur adipisicing elit.
-                        Atque quod dicta vitae expedita inventore, iusto aliquid rerum obcaecati quisquam,
-                        quibusdam eius quos vel, molestias ea quasi totam in perspiciatis delectus.</p>
+                    <h3 class="card-title mb-2">{{ question.title }}</h3>
+                    <p class="card-text">{{question.text}}</p>
                     <div class="d-flex gap-2" role="tags">
                         Tags:
-                        <a href="#">black_jack</a>
-                        <a href="#">bender</a>
+                        {% for tag in question.tags %}
+                        <a href="{% url 'tag' tag %}">{{tag}}</a>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <hr class="hr" />
     <div role="answers" class="container-fluid mt-2 align-items-center justify-content-start">
         <div class="d-flex flex-column gap-2 align-items-center" role="cards_of_questions">
-            <div class="card p-2" role="answer_card">
-                <div class="row g-0">
-
-                    <div class="d-flex flex-column align-items-center col-md-2 mt-2">
-                        <img src="..." class="img-thumbnail" alt="Question icon" style="width: 100px; height: 100px;">
-                        <form class="d-flex align-items-stretch mt-2">
-                            <input type="number" class="form-control text-center px-0" value="5" disabled
-                                style="width: 25px; height: 40px; border-radius: 0;">
-                            <div class="btn-group-vertical" role="likes_dislikes" style="width: 30px; height: 40px;">
-                                <input type="radio" class="btn-check" name="vbtn-radio1" id="vbtn-radio1_1"
-                                    autocomplete="off">
-                                <label
-                                    class="btn btn-outline-success btn-sm p-1 d-flex align-items-center justify-content-center"
-                                    for="vbtn-radio1_1" style="border-radius: 0; height: 50%;">+</label>
-                                <input type="radio" class="btn-check" name="vbtn-radio1" id="vbtn-radio1_2"
-                                    autocomplete="off">
-                                <label
-                                    class="btn btn-outline-danger btn-sm p-1 d-flex align-items-center justify-content-center"
-                                    for="vbtn-radio1_2" style="border-radius: 0; height: 50%;">-</label>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="col-md-10">
-                        <div class="card-body">
-                            <p class="card-text">
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi et
-                                aliquid praesentium maiores labore quasi, ducimus maxime quam Lorem ipsum dolor
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores expedita accusamus
-                                officiis eaque deserunt autem!
-                                Maxime doloremque veritatis minus, corrupti vero natus mollitia saepe ratione cumque
-                                ullam corporis, assumenda alias?
-                            </p>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckCorrect1">
-                                <label class="form-check-label" for="flexCheckCorrect1">Correct!</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card p-2" role="answer_card">
-                <div class="row g-0">
-
-                    <div class="d-flex flex-column align-items-center col-md-2 mt-2">
-                        <img src="..." class="img-thumbnail" alt="Question icon" style="width: 100px; height: 100px;">
-                        <form class="d-flex align-items-stretch mt-2">
-                            <input type="number" class="form-control text-center px-0" value="5" disabled
-                                style="width: 25px; height: 40px; border-radius: 0;">
-                            <div class="btn-group-vertical" role="likes_dislikes" style="width: 30px; height: 40px;">
-                                <input type="radio" class="btn-check" name="vbtn-radio2" id="vbtn-radio2_1"
-                                    autocomplete="off">
-                                <label
-                                    class="btn btn-outline-success btn-sm p-1 d-flex align-items-center justify-content-center"
-                                    for="vbtn-radio2_1" style="border-radius: 0; height: 50%;">+</label>
-                                <input type="radio" class="btn-check" name="vbtn-radio2" id="vbtn-radio2_2"
-                                    autocomplete="off">
-                                <label
-                                    class="btn btn-outline-danger btn-sm p-1 d-flex align-items-center justify-content-center"
-                                    for="vbtn-radio2_2" style="border-radius: 0; height: 50%;">-</label>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="col-md-10">
-                        <div class="card-body">
-                            <p class="card-text">
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi et
-                                aliquid praesentium maiores labore quasi, ducimus maxime quam Lorem ipsum dolor
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores expedita accusamus
-                                officiis eaque deserunt autem!
-                                Maxime doloremque veritatis minus, corrupti vero natus mollitia saepe ratione cumque
-                                ullam corporis, assumenda alias?
-                            </p>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckCorrect2">
-                                <label class="form-check-label" for="flexCheckCorrect2">Correct!</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card p-2" role="answer_card">
-                <div class="row g-0">
-
-                    <div class="d-flex flex-column align-items-center col-md-2 mt-2">
-                        <img src="..." class="img-thumbnail" alt="Question icon" style="width: 100px; height: 100px;">
-                        <form class="d-flex align-items-stretch mt-2">
-                            <input type="number" class="form-control text-center px-0" value="5" disabled
-                                style="width: 25px; height: 40px; border-radius: 0;">
-                            <div class="btn-group-vertical" role="likes_dislikes" style="width: 30px; height: 40px;">
-                                <input type="radio" class="btn-check" name="vbtn-radio3" id="vbtn-radio3_1"
-                                    autocomplete="off">
-                                <label
-                                    class="btn btn-outline-success btn-sm p-1 d-flex align-items-center justify-content-center"
-                                    for="vbtn-radio3_1" style="border-radius: 0; height: 50%;">+</label>
-                                <input type="radio" class="btn-check" name="vbtn-radio3" id="vbtn-radio3_2"
-                                    autocomplete="off">
-                                <label
-                                    class="btn btn-outline-danger btn-sm p-1 d-flex align-items-center justify-content-center"
-                                    for="vbtn-radio3_2" style="border-radius: 0; height: 50%;">-</label>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="col-md-10">
-                        <div class="card-body">
-                            <p class="card-text">
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi et
-                                aliquid praesentium maiores labore quasi, ducimus maxime quam Lorem ipsum dolor
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores expedita accusamus
-                                officiis eaque deserunt autem!
-                                Maxime doloremque veritatis minus, corrupti vero natus mollitia saepe ratione cumque
-                                ullam corporis, assumenda alias?
-                            </p>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckCorrect3">
-                                <label class="form-check-label" for="flexCheckCorrect3">Correct!</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card p-2" role="answer_card">
-                <div class="row g-0">
-
-                    <div class="d-flex flex-column align-items-center col-md-2 mt-2">
-                        <img src="..." class="img-thumbnail" alt="Question icon" style="width: 100px; height: 100px;">
-                        <form class="d-flex align-items-stretch mt-2">
-                            <input type="number" class="form-control text-center px-0" value="5" disabled
-                                style="width: 25px; height: 40px; border-radius: 0;">
-                            <div class="btn-group-vertical" role="likes_dislikes" style="width: 30px; height: 40px;">
-                                <input type="radio" class="btn-check" name="vbtn-radio4" id="vbtn-radio4_1"
-                                    autocomplete="off">
-                                <label
-                                    class="btn btn-outline-success btn-sm p-1 d-flex align-items-center justify-content-center"
-                                    for="vbtn-radio4_1" style="border-radius: 0; height: 50%;">+</label>
-                                <input type="radio" class="btn-check" name="vbtn-radio4" id="vbtn-radio4_2"
-                                    autocomplete="off">
-                                <label
-                                    class="btn btn-outline-danger btn-sm p-1 d-flex align-items-center justify-content-center"
-                                    for="vbtn-radio4_2" style="border-radius: 0; height: 50%;">-</label>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="col-md-10">
-                        <div class="card-body">
-                            <p class="card-text">
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi et
-                                aliquid praesentium maiores labore quasi, ducimus maxime quam Lorem ipsum dolor
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores expedita accusamus
-                                officiis eaque deserunt autem!
-                                Maxime doloremque veritatis minus, corrupti vero natus mollitia saepe ratione cumque
-                                ullam corporis, assumenda alias?
-                            </p>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckCorrect4">
-                                <label class="form-check-label" for="flexCheckCorrect4">Correct!</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% for answer in answers %}
+            {%include 'layouts/answer_card.html'%}
+            {%endfor%}
         </div>
-        <nav aria-label="Page navigation" class="mt-2">
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-            </ul>
-        </nav>
+
+        {%include 'layouts/paginator.html' with cards=answers%}
     </div>
     <hr class="hr" />
     <form class="input-group d-flex flex-column">
-        <textarea class="form-control w-100" aria-label="inputAnswer" rows="4" placeholder="Enter your answer here..."></textarea>
+        <textarea class="form-control w-100" aria-label="inputAnswer" rows="4"
+            placeholder="Enter your answer here..."></textarea>
         <button class="btn btn-primary col-md-2 mt-2 ms-1" style="border-radius: 0.25rem;">Answer!</button>
     </form>
 </div>
