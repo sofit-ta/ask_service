@@ -25,7 +25,7 @@
 
         <a href="{%url 'ask'%}" class="btn btn-success col-md-1 px-2" style="height: 40px;" type="submit">Ask!</a>
 
-        {% if not user.is_authenticated %}
+        {% if user.is_authenticated %}
         <div class="d-flex col-md-3 align-items-center justify-content-end" role="account_content">
           <img src="{%static user.img %}" alt="account image" class="img-thumbnail me-1"
             style="width: 70px; height: 70px;">
