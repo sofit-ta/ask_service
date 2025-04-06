@@ -25,7 +25,10 @@ QUESTIONS = [
 PROFILE = [
     {
         'img': '/img/profile.jpg',
-        'nickname': 'Dr. Pepper'
+        'nickname': 'Dr. Pepper',
+        'login': 'dr.pepper',
+        'email': 'dr.pepper@mail.ru'
+
     }]
 POPULAR_TAGS = [ f'tag{i}' for i in range(10)]
 BEST_MEMBERS = [
@@ -82,3 +85,6 @@ def login(request):
 
 def signup(request):
     return render(request, 'signup.html',  context={'popular_tags':POPULAR_TAGS, 'best_members':BEST_MEMBERS, 'user':PROFILE[0]})
+
+def settings(request):
+    return render(request, 'settings.html',  context={'popular_tags':POPULAR_TAGS, 'best_members':BEST_MEMBERS, 'user':PROFILE[0]})
