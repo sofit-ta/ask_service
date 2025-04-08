@@ -27,11 +27,11 @@
 
         {% if not user.is_authenticated %}
         <div class="d-flex col-md-3 align-items-center justify-content-end" role="account_content">
-          <img src="{%static user.img %}" alt="account image" class="img-thumbnail me-1"
+          <img src="{{ profile.img }}" alt="account image" class="img-thumbnail me-1"
             style="width: 70px; height: 70px;">
           <div class="d-flex flex-column" role="account_info">
             <a href="#" style="text-decoration: none; color: inherit;">
-              <h6>{{ user.nickname }}</h6>
+              <h6>{{ profile.nickname }}</h6>
             </a>
             <div role="account_links" class="d-flex justify-content-center gap-2">
               <a href="{% url 'settings'%}">settings</a>
@@ -58,7 +58,7 @@
         <h3>Popular tags</h3>
         <div role="tags" class="d-flex gap-2 flex-wrap">
           {% for tag in popular_tags %}
-          <a href="{% url 'tag' tag%}" class="link-primary">{{tag}}</a>
+          <a href="{{ tag.get_absolute_url }}" class="text-decoration-none text-success">{{ tag.name }}</a>
           {% endfor %}
         </div>
       </div>
@@ -66,7 +66,7 @@
         <h3>Best members</h3>
         <div class="d-flex flex-column gap-1">
           {% for member in best_members %}
-          <a href="{{ member.link }}">{{member.nickname}}</a>
+          <a href="{{ member.get_absolute_url }}">{{member.nickname}}</a>
           {%endfor%}
         </div>
       </div>
