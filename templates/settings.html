@@ -8,7 +8,7 @@
             <label for="inputLogin" class="col-md-2 col-form-label">Login</label>
             <div class="col-md-8 me-2">
                 <input type="login" class="form-control" id="inputLogin" minlength="5" maxlength="30"
-                    placeholder="Enter your new login" value="{{user.login}}" pattern="^[a-z0-9_]{5,30}$">
+                    placeholder="Enter your new login" value="{{user.username}}" pattern="^[a-z0-9_]{5,30}$">
                 <div class="form-text login-hint text-danger">Login has to be 5-30 characters long and consists of
                     lowercase latin letters, numbers, and underscores (_).</div>
             </div>
@@ -26,14 +26,14 @@
             <label for="inputNickname" class="col-md-2 col-form-label">Nickname</label>
             <div class="col-md-8 me-2">
                 <input type="nickname" class="form-control" id="inputNickname" minlength="5" maxlength="30"
-                    placeholder="Enter a new nickname" value="{{user.nickname}}" required>
+                    placeholder="Enter a new nickname" value="{{profile.nickname}}" required>
                 <div class="form-text nickname-hint text-danger">This field cannot be empty. Minimum 5 characters.</div>
             </div>
         </div>
         <div class="row d-flex gap-2">
             <label class="col-md-2 col-form-label" for="inputGroupFile01">Current avatar</label>
             <div class="col-md-8 me-2">
-                <img src="{%static user.img %}" alt="Current avatar" style="max-width: 150px;">
+                <img src="{{profile.img}}" alt="Current avatar" style="max-width: 150px;">
             </div>
         </div>
         <div class="row d-flex gap-2">

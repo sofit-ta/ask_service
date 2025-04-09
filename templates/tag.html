@@ -4,7 +4,7 @@
 {% block content %}
 <div role="questions" class="container-fluid mt-2 align-items-center justify-content-start">
     <div class="d-flex gap-2 align-items-center">
-        <h3>Tag: {{tag}}</h3>
+        <h3>Tag: {{tag.name}}</h3>
     </div>
 {%if questions%}
     <div class="d-flex flex-column gap-2 align-items-center" role="cards_of_questions">

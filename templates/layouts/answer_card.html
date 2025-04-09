@@ -2,9 +2,9 @@
 <div class="card p-2" role="answer_card">
     <div class="row g-0">
         <div class="d-flex flex-column align-items-center col-md-2 mt-2">
-            <img src="{% static answer.img %}" class="img-thumbnail" alt="Answer icon" style="width: 100px; height: 100px;">
+            <img src="{{ answer.author.img}}" class="img-thumbnail" alt="Answer icon" style="width: 100px; height: 100px;">
             <form class="d-flex align-items-stretch mt-2">
-                <input type="number" class="form-control text-center px-0" value={{answer.likes}} disabled
+                <input type="number" class="form-control text-center px-0" value={{answer.like.count}} disabled
                     style="width: 40px; height: 40px; border-radius: 0;">
                 <div class="btn-group-vertical" role="likes_dislikes" style="width: 30px; height: 40px;">
                     <input type="radio" class="btn-check" name="vote-{{answer.id}}" id="like-{{answer.id}}"

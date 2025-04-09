@@ -1,42 +1,8 @@
-import copy
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import get_object_or_404, render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-import random
-QUESTIONS = [
-    {
-        'title': f'Question title {i}?',
-        'id': i,
-        'text': f'{i} Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi et aliquid praesentium maiores labore quasi, ducimus maxime quam Lorem ipsum dolor Maxime doloremque veritatis minus, corrupti vero natus mollitia saepe ratione...',
-        'img': '/img/profile.jpg',
-        'likes': random.randint(-5,20),
-        'number_of_answers': random.randint(0,10),
-        'answers': [
-            {
-                'id': j,
-                'text': f'{j} Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi et aliquid praesentium maiores labore quasi, ducimus maxime quam Lorem ipsum dolor Maxime doloremque veritatis minus, corrupti vero natus mollitia saepe ratione...',
-                'img': '/img/profile.jpg',
-                'likes': random.randint(-5,20),
-            }for j in range(30)
-        ],
-        'tags': [ f'tag{j}' for j in range(2) ]
+from .models import Profile, Tag, Question, Answer
+from django.contrib.auth.models import AnonymousUser
 
-    } for i in range(30)
-]
-PROFILE = [
-    {
-        'img': '/img/profile.jpg',
-        'nickname': 'Dr. Pepper',
-        'login': 'dr.pepper',
-        'email': 'dr.pepper@mail.ru'
-
-    }]
-POPULAR_TAGS = [ f'tag{i}' for i in range(10)]
-BEST_MEMBERS = [
-    {
-        'nickname': f'Mr. member {i}',
-        'link': '/'
-    } for i in range(5)
-]
 
 def paginate(objects, request, per_page=20):
     page_number = request.GET.get('page')
@@ -50,41 +16,52 @@ def paginate(objects, request, per_page=20):
     
     return page
 
+def get_base_context(user):
+    return {
+        'popular_tags': Tag.objects.best(),
+        'best_members': Profile.objects.best(),
+        'user': user,
+        'profile': user.profile if user.is_authenticated and hasattr(user, 'profile') else None
+    }
+
+
 # Create your views here.
 def index(request):
-    questions = QUESTIONS
-    page_obj = paginate(questions, request)
-    return render(request, 'index.html', {'questions': page_obj, 'popular_tags':POPULAR_TAGS, 'best_members':BEST_MEMBERS, 'user':PROFILE[0]})
+    questions = Question.objects.new()
+    context = get_base_context(request.user)
+    context['questions'] = paginate(questions, request)
+    return render(request, 'index.html', context)
 
 def hot_questions(request):
-    questions = copy.deepcopy(list(reversed(QUESTIONS)))
-    page_obj = paginate(questions, request)
-    return render(request, 'hot.html', {'questions': page_obj,'popular_tags':POPULAR_TAGS, 'best_members':BEST_MEMBERS, 'user':PROFILE[0]})
+    questions = Question.objects.best()
+    context = get_base_context(request.user)
+    context['questions'] = paginate(questions, request)
+    return render(request, 'hot.html', context)
 
 def question(request, question_id):
-    answers = QUESTIONS[question_id]['answers'] 
-    page_obj = paginate(answers, request)
-    return render(request, 'question.html', {'question': QUESTIONS[question_id],'answers': page_obj,'popular_tags':POPULAR_TAGS, 'best_members':BEST_MEMBERS, 'user':PROFILE[0]})
+    answers = Answer.objects.for_question(question_id)
+    context = get_base_context(request.user)
+    context['answers'] = paginate(answers, request)
+    context['question']= get_object_or_404(Question, id=question_id)
+    return render(request, 'question.html', context)
 
 def tag(request, tag_name):
-    filtered_questions = []
-    for question in QUESTIONS:
-        for tag in question['tags']:
-            if tag == tag_name:
-                filtered_questions.append(question)
-                break
-    page_obj = paginate(filtered_questions, request)
-    return render(request, 'tag.html', {'questions': page_obj,'popular_tags':POPULAR_TAGS, 'best_members':BEST_MEMBERS, 'user':PROFILE[0], 'tag':tag_name})
-# надо доделать страницу с поиском по тегу
+    tag = get_object_or_404(Tag, name = tag_name)
+    questions = Question.objects.for_tag(tag_name)
+    context = get_base_context(request.user)
+    context['questions'] = paginate(questions, request)
+    context['tag'] = tag
+    return render(request, 'tag.html', context)
+
 
 def ask(request):
-    return render(request, 'ask.html', context={'popular_tags':POPULAR_TAGS, 'best_members':BEST_MEMBERS, 'user':PROFILE[0]})
+    return render(request, 'ask.html', context=get_base_context(request.user))
 
 def login(request):
-    return render(request, 'login.html', context={'popular_tags':POPULAR_TAGS, 'best_members':BEST_MEMBERS, 'user':PROFILE[0]})
+    return render(request, 'login.html', context=get_base_context(request.user))
 
 def signup(request):
-    return render(request, 'signup.html',  context={'popular_tags':POPULAR_TAGS, 'best_members':BEST_MEMBERS, 'user':PROFILE[0]})
+    return render(request, 'signup.html',  context=get_base_context(request.user))
 
 def settings(request):
-    return render(request, 'settings.html',  context={'popular_tags':POPULAR_TAGS, 'best_members':BEST_MEMBERS, 'user':PROFILE[0]})
+    return render(request, 'settings.html',  context=get_base_context(request.user))
