@@ -4,7 +4,6 @@ from app.models import AnswerLike, Profile, QuestionLike, User, Question, Answer
 from django.db import transaction
 
 class Command(BaseCommand):
-    help = 'Наполняет базу данных тестовыми данными или удаляет всех пользователей'
 
     def add_arguments(self, parser):
         parser.add_argument('ratio', type=int, help='Коэффициент заполнения сущностей')
