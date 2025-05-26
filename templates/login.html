@@ -1,31 +1,64 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
+{% load static %}
 <div role="login_window" class="container-fluid mt-2 align-items-center justify-content-start">
     <h3>Log In</h3>
-    <form role="log_in_form" class="d-flex flex-column me-1 gap-2 ms-3 needs-validation" novalidate>
 
-        <div class="form-text login-error text-danger">Wrong email or password!</div>
+    <form role="log_in_form" method="POST" action="" class="d-flex flex-column me-1 gap-2 ms-3 needs-validation" novalidate>
+        {% csrf_token %}
+        {% if form.errors %}
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <div class="form-text login-error text-danger" style="display: block;">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
 
         <div class="row d-flex gap-2">
-            <label for="inputEmail" class="col-md-1 col-form-label">Email</label>
+            <label for="id_username" class="col-md-1 col-form-label">Login</label>
             <div class="col-md-9 me-2">
-                <input type="email" class="form-control" id="inputEmail" maxlength="320" placeholder="Enter your email" required>
-                <div class="form-text email-hint text-danger">Enter a valid email (e.g. name@example.com)</div>
+                <input type="text" name="username"
+                       class="form-control {% if form.errors.username %}is-invalid{% endif %}"
+                       id="id_username"
+                       maxlength="30"
+                       pattern="^[a-z0-9_]{5,30}$"
+                       placeholder="Enter your login"
+                       required
+                       value="{{ form.username.value|default_if_none:'' }}">
+                <div class="form-text login-hint">
+                    Login must be 5-30 lowercase letters, digits, or underscores (_).
+                </div>
+                {% if form.errors.username %}
+                    <div class="form-text text-danger" style="display: block;">{{ form.errors.username.0 }}</div>
+                {% endif %}
             </div>
         </div>
 
         <div class="row d-flex gap-2">
-            <label for="inputPassword" class="col-md-1 col-form-label">Password</label>
+            <label for="id_password" class="col-md-1 col-form-label">Password</label>
             <div class="col-md-9 me-2">
-                <input type="password" class="form-control" id="inputPassword" minlength="8" maxlength="20" placeholder="Enter your password" required>
-                <div class="form-text password-hint text-danger">Password must be 8-20 characters long.</div>
+                <input type="password" name="password"
+                       class="form-control {% if form.errors.password %}is-invalid{% endif %}"
+                       id="id_password"
+                       minlength="8"
+                       maxlength="20"
+                       placeholder="Enter your password"
+                       required>
+                <div class="form-text password-hint">
+                    Password must be 8-20 characters long.
+                </div>
+                {% if form.errors.password %}
+                    <div class="form-text text-danger" style="display: block;">{{ form.errors.password.0 }}</div>
+                {% endif %}
             </div>
         </div>
+
+        <input type="hidden" name="continue" value="{{ continue }}">
 
         <div class="row d-flex gap-2">
             <span class="col-md-1 col-form-label"></span>
             <div class="col-md-2 me-2">
-                <button class="btn btn-primary login-button" style="border-radius: 0.25rem;">Log In</button>
+                <button type="submit" class="btn btn-primary login-button" style="border-radius: 0.25rem;">Log In</button>
             </div>
         </div>
     </form>
@@ -35,38 +68,22 @@
     .form-control {
         border: 1px solid black;
     }
+    .form-control.is-invalid {
+        border-color: red;
+    }
     .form-control:valid {
         border-color: green;
     }
-    .form-control:invalid:focus ~ .form-text.email-hint,
-    .form-control:invalid:focus ~ .form-text.password-hint {
+    .form-control:invalid:focus ~ .login-hint,
+    .form-control:invalid:focus ~ .password-hint {
         display: block;
     }
-    .form-control:valid ~ .form-text.email-hint,
-    .form-control:valid ~ .form-text.password-hint {
+    .form-control:valid ~ .login-hint,
+    .form-control:valid ~ .password-hint {
         display: none;
-    }
-    .form-control:focus:invalid ~ .form-text.email-hint {
-        display: block;
-    }
-    .form-control:focus:invalid ~ .form-text.password-hint {
-        display: block;
     }
     .form-text {
         display: none;
     }
 </style>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const button = document.querySelector(".login-button");
-        const errorMessage = document.querySelector(".login-error");
-
-        button.addEventListener("click", function (event) {
-            event.preventDefault();
-            errorMessage.style.display = "block";
-        });
-    });
-</script>
-
 {% endblock %}
