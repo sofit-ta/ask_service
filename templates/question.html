@@ -5,8 +5,11 @@
     <div class="p-2 mb-4" role="question_card">
         <div class="row g-0">
             <div class="d-flex flex-column align-items-center col-md-3 mt-2 me-2">
-                <img src="{{question.author.img}}" class="img-thumbnail" alt="Question icon"
-                    style="width: 150px; height: 150px;">
+                {% if question.author.img %}
+                    <img src="{{question.author.img.url}}" class="img-thumbnail" alt="Question icon" style="width: 150px; height: 150px;"> 
+                {% else %}
+                    <img src="{% static 'img/default_avatar.png' %}" class="img-thumbnail" class="img-thumbnail" alt="Question icon" style="width: 150px; height: 150px;">
+                {% endif %}
                 <form class="d-flex align-items-stretch mt-2">
                     <input type="number" class="form-control text-center px-0" value="{{question.like.count}}" disabled
                         style="width: 40px; height: 40px; border-radius: 0;">
@@ -43,7 +46,7 @@
     <hr class="hr" />
     {%if answers%}
     <div role="answers" class="container-fluid mt-2 align-items-center justify-content-start">
-        <div class="d-flex flex-column gap-2 align-items-center" role="cards_of_questions">
+        <div class="d-flex flex-column gap-2 w-100" role="cards_of_questions">
             {% for answer in answers %}
             {%include 'layouts/answer_card.html'%}
             {%endfor%}
@@ -57,10 +60,21 @@
     </div>
     {%endif%}
     <hr class="hr" />
-    <form class="input-group d-flex flex-column">
-        <textarea class="form-control w-100" aria-label="inputAnswer" rows="4"
-            placeholder="Enter your answer here..."></textarea>
-        <button class="btn btn-primary col-md-2 mt-2 ms-1" style="border-radius: 0.25rem;">Answer!</button>
+    <form method="POST" action="{% url 'question' question.id %}" class="input-group d-flex flex-column">
+        {% csrf_token %}
+    
+        <textarea name="text"
+                  class="form-control w-100 {% if form.text.errors %}is-invalid{% endif %}"
+                  rows="4"
+                  placeholder="Enter your answer here...">{{ form.text.value|default_if_none:'' }}</textarea>
+    
+        {% if form.text.errors %}
+            <div class="invalid-feedback d-block">
+                {{ form.text.errors.0 }}
+            </div>
+        {% endif %}
+    
+        <button type="submit" class="btn btn-primary col-md-2 mt-2 ms-1" style="border-radius: 0.25rem;">Answer!</button>
     </form>
 </div>
 {% endblock %}

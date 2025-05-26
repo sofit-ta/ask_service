@@ -7,7 +7,7 @@
         <a href="{% url 'index'%}">New Questions</a>
     </div>
 
-    <div class="d-flex flex-column gap-2 align-items-center" role="cards_of_questions">
+    <div class="d-flex flex-column gap-2 w-100" role="cards_of_questions">
         {% for question in questions %}
         {%include 'layouts/question_card.html'%}
         {%endfor%}

@@ -1,8 +1,12 @@
 {% load static %}
-<div class="card p-2" role="answer_card">
+<div class="card p-2" role="answer_card" id="answer-{{ answer.id }}">
     <div class="row g-0">
         <div class="d-flex flex-column align-items-center col-md-2 mt-2">
-            <img src="{{ answer.author.img}}" class="img-thumbnail" alt="Answer icon" style="width: 100px; height: 100px;">
+            {% if answer.author.img %}
+                <img src="{{ answer.author.img.url}}" class="img-thumbnail" alt="Answer icon" style="width: 100px; height: 100px;">
+            {% else %}
+                <img src="{% static 'img/default_avatar.png' %}" class="img-thumbnail" alt="Answer icon" style="width: 100px; height: 100px;">
+            {% endif %}
             <form class="d-flex align-items-stretch mt-2">
                 <input type="number" class="form-control text-center px-0" value={{answer.like.count}} disabled
                     style="width: 40px; height: 40px; border-radius: 0;">
