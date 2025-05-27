@@ -1,17 +1,18 @@
 from django.db import models
 from django.db.models import Count
 from django.contrib.auth.models import User
+from django.dispatch import receiver
 from django.urls import reverse
-
-class QuestionManager(models.Manager):
-    def best(self):
-        return self.annotate(likes_amount=Count('like')).order_by('-likes_amount')
     
+class QuestionManager(models.Manager):
     def new(self):
         return self.order_by('-created_at')
-    
+
+    def best(self):
+        return self.order_by('-likes_amount', '-created_at')
+
     def for_tag(self, tag_name):
-        return self.filter(tags__name=tag_name).annotate(likes_amount=Count('like')).order_by('-likes_amount')
+        return self.filter(tags__name=tag_name).order_by('-likes_amount', '-created_at')
     
 class TagManager(models.Manager):
     def best(self):
@@ -23,11 +24,11 @@ class ProfileManager(models.Manager):
     
 class AnswerManager(models.Manager):
     def for_question(self, question_id):
-        return self.filter(question__id=question_id).select_related('author').annotate(likes_amount=Count('like')).order_by('-likes_amount')
+        return self.filter(question__id=question_id).select_related('author').order_by('-is_correct', '-likes_amount','-created_at')
     
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    img = models.ImageField(upload_to='static/img', null=True, blank=True)
+    img = models.ImageField(upload_to='img', null=True, blank=True)
     nickname = models.CharField(max_length=255)
 
     objects = ProfileManager()
@@ -41,6 +42,7 @@ class Question(models.Model):
     author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True, related_name='question')
     created_at = models.DateTimeField(auto_now_add=True)
     tags = models.ManyToManyField('Tag', related_name='question')
+    likes_amount = models.IntegerField(default=0)
 
     objects = QuestionManager()
     def get_absolute_url(self):
@@ -60,17 +62,18 @@ class Answer(models.Model):
     author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, related_name='answer')
     created_at = models.DateTimeField(auto_now_add=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
-
+    likes_amount = models.IntegerField(default=0)
+    is_correct = models.BooleanField(default=False)
     objects = AnswerManager()
 
 
 class QuestionLike(models.Model):
     user =  models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='like')
-    VALUE_CHOICES = {
-        (1, 'Like'),
-        (-1, 'Dislike')
-    }
+    VALUE_CHOICES = (
+    (1, 'Like'),
+    (-1, 'Dislike')
+    )
     value = models.IntegerField(choices=VALUE_CHOICES)
     class Meta():
         unique_together = ["user", "question"]
@@ -79,10 +82,10 @@ class QuestionLike(models.Model):
 class AnswerLike(models.Model):
     user =  models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='like')
-    VALUE_CHOICES = {
-        (1, 'Like'),
-        (-1, 'Dislike')
-    }
+    VALUE_CHOICES = (
+    (1, 'Like'),
+    (-1, 'Dislike')
+    )
     value = models.IntegerField(choices=VALUE_CHOICES)
     class Meta():
         unique_together = ["user", "answer"]

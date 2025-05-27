@@ -1,37 +1,54 @@
 {% load static %}
-<div class="card p-2" role="answer_card" id="answer-{{ answer.id }}">
+<div class="card p-2 {% if answer.is_correct %}border-success{% endif %}" role="answer_card" id="answer-{{ answer.id }}">
     <div class="row g-0">
         <div class="d-flex flex-column align-items-center col-md-2 mt-2">
             {% if answer.author.img %}
-                <img src="{{ answer.author.img.url}}" class="img-thumbnail" alt="Answer icon" style="width: 100px; height: 100px;">
+                <img src="{{ answer.author.img.url }}" class="img-thumbnail" alt="Answer icon" style="width: 100px; height: 100px;">
             {% else %}
                 <img src="{% static 'img/default_avatar.png' %}" class="img-thumbnail" alt="Answer icon" style="width: 100px; height: 100px;">
             {% endif %}
+        
             <form class="d-flex align-items-stretch mt-2">
-                <input type="number" class="form-control text-center px-0" value={{answer.like.count}} disabled
-                    style="width: 40px; height: 40px; border-radius: 0;">
-                <div class="btn-group-vertical" role="likes_dislikes" style="width: 30px; height: 40px;">
-                    <input type="radio" class="btn-check" name="vote-{{answer.id}}" id="like-{{answer.id}}"
-                        autocomplete="off">
-                    <label
-                        class="btn btn-outline-success btn-sm p-1 d-flex align-items-center justify-content-center"
-                        for="like-{{answer.id}}" style="border-radius: 0; height: 50%;">+</label>
-                    <input type="radio" class="btn-check" name="vote-{{answer.id}}" id="dislike-{{answer.id}}"
-                        autocomplete="off">
-                    <label
-                        class="btn btn-outline-danger btn-sm p-1 d-flex align-items-center justify-content-center"
-                        for="dislike-{{answer.id}}" style="border-radius: 0; height: 50%;">-</label>
+                <input type="number" id="like-counter-answer-{{ answer.id }}" class="form-control text-center px-0"
+                value="{{ answer.likes_amount }}" disabled style="width: 40px; height: 40px; border-radius: 0;">
+        
+                <div class="btn-group-vertical" role="likes_dislikes" style="width: 30px; height: 40px;"
+                    data-answer-id="{{ answer.id }}">
+                    <button type="button"
+                            class="btn btn-outline-success btn-sm p-1 d-flex align-items-center justify-content-center"
+                            data-type="answer"
+                            data-id="{{ answer.id }}"
+                            data-value="1"
+                            style="border-radius: 0; height: 50%;">+
+                    </button>
+                    <button type="button"
+                            class="btn btn-outline-danger btn-sm p-1 d-flex align-items-center justify-content-center"
+                            data-type="answer"
+                            data-id="{{ answer.id }}"
+                            data-value="-1"
+                            style="border-radius: 0; height: 50%;">-
+                    </button>
                 </div>
             </form>
         </div>
 
         <div class="col-md-10">
             <div class="card-body">
-                <p class="card-text">{{answer.text}}</p>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckCorrect-{{answer.id}}">
-                    <label class="form-check-label" for="flexCheckCorrect-{{answer.id}}">Correct!</label>
-                </div>
+                <p class="card-text">{{ answer.text }}</p>
+        
+                {% if is_author %}
+                    <div class="form-check">
+                        <input class="form-check-input mark-correct" 
+                               type="checkbox"
+                               data-answer-id="{{ answer.id }}"
+                               {% if answer.is_correct %}checked{% endif %}>
+                        <label class="form-check-label">Correct!</label>
+                    </div>
+                {% endif %}
+        
+                {% if answer.is_correct %}
+                    <div class="text-success mt-2 fw-bold">Question author chose this as correct answer</div>
+                {% endif %}
             </div>
         </div>
     </div>

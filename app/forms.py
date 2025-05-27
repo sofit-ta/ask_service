@@ -133,6 +133,10 @@ class ProfileEditForm(forms.ModelForm):
     def save(self, commit=True):
         profile = super().save(commit=False)
         if commit:
+            if profile.img and 'img' in self.changed_data:
+                old_img = Profile.objects.get(pk=profile.pk).img
+                if old_img and old_img.name != profile.img.name:
+                    old_img.delete(save=False)
             profile.save()
         return profile
     
@@ -156,16 +160,24 @@ class AskForm(forms.Form):
         return text
 
     def clean_tags(self):
-        tags = self.cleaned_data.get('tags', '')
-        if not tags.strip():
+        tags = self.cleaned_data.get('tags', '').strip()
+        if not tags:
             raise forms.ValidationError("Tags are required.")
-        tag_list = [tag.strip() for tag in tags.split(',') if tag.strip()]
-        if not tag_list:
-            raise forms.ValidationError("Provide at least one valid tag.")
+        
+        tag_list = [t.strip().lower() for t in tags.split(',') if t.strip()]
+        if len(tag_list) == 0:
+            raise forms.ValidationError("At least one tag is required.")
+        if len(tag_list) > 5:
+            raise forms.ValidationError("You can enter up to 5 tags.")
+        
         for tag in tag_list:
-            if not tag.isalnum():
-                raise forms.ValidationError("Tags must be alphanumeric and comma-separated.")
-        return tags
+            if not re.match(r'^[a-z0-9]{1,30}$', tag):
+                raise forms.ValidationError(
+                    "Tags must be lowercase letters, numbers, up to 30 characters."
+                )
+        
+        # Сохраняем в виде строки через запятую
+        return ','.join(tag_list)
 
 class AnswerForm(forms.ModelForm):
     class Meta:
@@ -187,3 +199,13 @@ class AnswerForm(forms.ModelForm):
         if not text:
             raise forms.ValidationError("Answer text cannot be empty.")
         return text
+
+
+class VoteForm(forms.Form):
+    value = forms.IntegerField()
+
+    def clean_value(self):
+        value = self.cleaned_data['value']
+        if value not in [1, -1]:
+            raise forms.ValidationError("Vote must be either 1 or -1.")
+        return value

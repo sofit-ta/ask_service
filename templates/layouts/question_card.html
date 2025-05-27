@@ -1,44 +1,49 @@
 {% load static %}
+{% with vote=voted_question %}
 <div class="card p-2" role="question_card">
     <div class="row g-0">
         <div class="d-flex flex-column align-items-center col-md-2 mt-2">
             {% if question.author.img %}
-                <img src="{{question.author.img.url }}" class="img-thumbnail" alt="Question icon" style="width: 100px; height: 100px;">
+                <img src="{{ question.author.img.url }}" class="img-thumbnail" alt="Question icon" style="width: 100px; height: 100px;">
             {% else %}
                 <img src="{% static 'img/default_avatar.png' %}" class="img-thumbnail" alt="Question icon" style="width: 100px; height: 100px;">
             {% endif %}
             <form class="d-flex align-items-stretch mt-2">
-                <input type="number" class="form-control text-center px-0" value="{{question.like.count}}" disabled
-                    style="width: 40px; height: 40px; border-radius: 0;">
-                <div class="btn-group-vertical" role="likes_dislikes" style="width: 30px; height: 40px;">
-                    <input type="radio" class="btn-check" name="vote-{{question.id}}" id="like-{{question.id}}"
-                        autocomplete="off">
-                    <label
-                        class="btn btn-outline-success btn-sm p-1 d-flex align-items-center justify-content-center"
-                        for="like-{{question.id}}" style="border-radius: 0; height: 50%;">+</label>
-                    <input type="radio" class="btn-check" name="vote-{{question.id}}" id="dislike-{{question.id}}"
-                        autocomplete="off">
-                    <label
-                        class="btn btn-outline-danger btn-sm p-1 d-flex align-items-center justify-content-center"
-                        for="dislike-{{question.id}}" style="border-radius: 0; height: 50%;">-</label>
-                </div>
+                <input type="number" id="like-counter-question-{{ question.id }}" class="form-control text-center px-0"
+                       value="{{ question.likes_amount|default:0 }}" disabled style="width: 40px; height: 40px; border-radius: 0;">
+                       <div class="btn-group-vertical" role="likes_dislikes" style="width: 30px; height: 40px;" data-question-id="{{ question.id }}">
+                      <button type="button"
+                              class="btn btn-outline-success btn-sm p-1 d-flex align-items-center justify-content-center"
+                              data-type="question"
+                              data-id="{{ question.id }}"
+                              data-value="1"
+                              style="border-radius: 0; height: 50%;">+
+                      </button>
+                      <button type="button"
+                              class="btn btn-outline-danger btn-sm p-1 d-flex align-items-center justify-content-center"
+                              data-type="question"
+                              data-id="{{ question.id }}"
+                              data-value="-1"
+                              style="border-radius: 0; height: 50%;">-
+                      </button>
+                  </div>
             </form>
         </div>
 
         <div class="col-md-10">
             <div class="card-body">
                 <a href="{% url 'question' question.id %}">
-                    <h4 class="card-title">{{question.title}}</h4>
+                    <h4 class="card-title">{{ question.title }}</h4>
                 </a>
                 <p class="card-text">
-                    {{question.short_text}}
+                    {{ question.short_text }}
                 </p>
                 <div class="d-flex">
-                    <a class="col-md-3" href="{% url 'question' question.id %}">answers ({{question.answers.count}})</a>
+                    <a class="col-md-3" href="{% url 'question' question.id %}">answers ({{ question.answers.count }})</a>
                     <div class="d-flex gap-2 col-md-9" role="tags">
                         Tags:
                         {% for tag in question.tags.all %}
-                        <a href="{{tag.get_absolute_url}}">{{tag.name}}</a>
+                        <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
                         {% endfor %}
                     </div>
                 </div>
@@ -46,3 +51,4 @@
         </div>
     </div>
 </div>
+{% endwith %}
