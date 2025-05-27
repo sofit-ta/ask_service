@@ -17,6 +17,8 @@ Including another URLconf
 
 from django.urls import path
 from app import views
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('', views.index, name='index'),
     path('hot/', views.hot_questions, name='hot_questions'),
@@ -26,5 +28,9 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('signup/', views.signup, name='signup'),
     path('profile/edit/', views.settings, name='settings'),
-    path('logout/', views.logout, name='logout')
+    path('logout/', views.logout, name='logout'),
+    path("like/", views.like, name="like"),
+    path('mark-correct/<int:answer_id>/', views.mark_correct_answer, name='mark_correct_answer')
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
