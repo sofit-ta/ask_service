@@ -1,5 +1,5 @@
 """
-WSGI config for askme_taukaeva project.
+WSGI config for ask_taukaeva project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,7 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'askme_taukaeva.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ask_taukaeva.settings')
 
 application = get_wsgi_application()
+
